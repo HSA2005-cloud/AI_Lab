@@ -66,10 +66,23 @@ def a_star(start, goal):
     # (f, g, state, path)
     heapq.heappush(pq, (h, 0, start, [start]))
 
+    print("Initial node:")
+    print(f"  state = {start}")
+    print(f"  g = 0")
+    print(f"  h = {h}")
+    print(f"  f = {h}")
+    print()
+
     visited = set()
 
     while pq:
         f, g, state, path = heapq.heappop(pq)
+
+        print(f"Popped node: {state}")
+        print(f"  g = {g}")
+        print(f"  h = {manhattan_distance(state, goal)}")
+        print(f"  f = {f}")
+        print()
 
         if state in visited:
             continue
@@ -77,6 +90,7 @@ def a_star(start, goal):
         visited.add(state)
 
         if state == goal:
+            print("Goal reached!")
             return path
 
         for neighbor in get_neighbors(state):
@@ -86,10 +100,20 @@ def a_star(start, goal):
                 new_h = manhattan_distance(neighbor, goal)
                 new_f = new_g + new_h
 
+                print(f"  Generating neighbor: {neighbor}")
+                print(f"    g = {new_g}")
+                print(f"    h = {new_h}")
+                print(f"    f = {new_f}")
+
                 heapq.heappush(
                     pq,
                     (new_f, new_g, neighbor, path + [neighbor])
                 )
+
+        print("Priority queue (frontier):")
+        for item in pq:
+            print(f"  {item[2]} -> g={item[1]}, h={manhattan_distance(item[2], goal)}, f={item[0]}")
+        print("-" * 40)
 
     return None
 
